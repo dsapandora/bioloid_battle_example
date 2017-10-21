@@ -19,7 +19,7 @@ loaded_model._make_predict_function()
 graph = tf.get_default_graph()
 # load weights into new model
 loaded_model.load_weights("modelsoftmax_matrix.h5")
-bioloid_action = ["WFWD","WBWD","WLT ","WRT ","WLSD","WRSD","WFLS","WFRS","WBLS","WBRS","WAL ","WAR ","WFLT","WFRT","WBLT","WBRT","WRDY","SIT ","STND","ATKL","ATKR","ATKF", "ATKD"]
+bioloid_action = ["WFWD\n","WBWD\n","WLT \n","WRT \n","WLSD\n","WRSD\n","WFLS\n","WFRS\n","WBLS\n","WBRS\n","WAL \n","WAR \n","WFLT\n","WFRT\n","WBLT\n","WBRT\n","WRDY\n","SIT \n","STND\n","ATKL\n","ATKR\n","ATKF\n", "ATKD\n"]
 
 
 def reverse_map_prediction(prediction_matrix):
@@ -27,7 +27,7 @@ def reverse_map_prediction(prediction_matrix):
     # que transformar el arreglo de numeros en matrices, ahora necesitamos
     # regresarlo a su valor original para poder ser usado la lista bioloi
     index = argmax(prediction_matrix, axis=1) - 1
-    return bytearray(bioloid_action[index])
+    return bioloid_action[index]
 
 def callback(detectedPersons):
     output = "DETECTADOS: "
@@ -50,13 +50,13 @@ def callback(detectedPersons):
             with graph.as_default():
                 prediction_matrix = loaded_model.predict(values)
                 value = reverse_map_prediction(prediction_matrix)
-                output += str(detectionId) + ","+ " ".join(str(e) for e in value)
+                output += str(detectionId) + ","+ value
                 # ACTIVATE when you have the robot connected to the computer
                 # The port can change.
-                # if detectionId == 0:
-                #     ser = serial.Serial('/dev/ttyUSB0', 57600)
-                #     ser.write(value)
-                #     ser.close()
+                if detectionId == 0:
+                    ser = serial.Serial('/dev/ttyUSB0', 57600)
+                    ser.write(value)
+                    ser.close()
                 # if detectionId == 1:
                 #     ser = serial.Serial('/dev/ttyUSB1', 57600)
                 #     ser.write(value)
