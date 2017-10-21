@@ -20,7 +20,8 @@ graph = tf.get_default_graph()
 # load weights into new model
 loaded_model.load_weights("modelsoftmax_matrix.h5")
 bioloid_action = ["WFWD\r","WBWD\r","WLT \r","WRT \r","WLSD\r","WRSD\r","WFLS\r","WFRS\r","WBLS\r","WBRS\r","WAL \r","WAR \r","WFLT\r","WFRT\r","WBLT\r","WBRT\r","WRDY\r","SIT \r","STND\r","ATKL\r","ATKR\r","ATKF\r", "ATKD\r"]
-ser = serial.Serial('/dev/ttyUSB0', 57600)
+ser0 = serial.Serial('/dev/ttyUSB0', 57600)
+ser1 = serial.Serial('/dev/ttyUSB1', 57600)
 
 
 def reverse_map_prediction(prediction_matrix):
@@ -55,12 +56,11 @@ def callback(detectedPersons):
                 # ACTIVATE when you have the robot connected to the computer
                 # The port can change.
                 if detectionId == 0:
-                    ser.write(value)
+                    ser0.write(value)
                     rospy.loginfo(ser.read(4))
                 # if detectionId == 1:
-                #     ser = serial.Serial('/dev/ttyUSB1', 57600)
-                #     ser.write(value)
-                #     ser.close()
+                #     ser1.write(value)
+                #     ser1.close()
 
 def main():
     rospy.init_node('robot_controller', anonymous=True)
