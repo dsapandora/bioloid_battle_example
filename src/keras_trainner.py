@@ -50,6 +50,7 @@ model.add(Dense(23, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 from keras.utils.np_utils import to_categorical
 categorical_labels = to_categorical(Y, num_classes=23)
+# Move epochs in case that more data to help the converegence
 model.fit(X, categorical_labels, epochs=1000, batch_size=4)
 scores = model.evaluate(X, categorical_labels)
 
