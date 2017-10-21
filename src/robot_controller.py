@@ -19,7 +19,8 @@ loaded_model._make_predict_function()
 graph = tf.get_default_graph()
 # load weights into new model
 loaded_model.load_weights("modelsoftmax_matrix.h5")
-bioloid_action = ["WFWD\n","WBWD\n","WLT \n","WRT \n","WLSD\n","WRSD\n","WFLS\n","WFRS\n","WBLS\n","WBRS\n","WAL \n","WAR \n","WFLT\n","WFRT\n","WBLT\n","WBRT\n","WRDY\n","SIT \n","STND\n","ATKL\n","ATKR\n","ATKF\n", "ATKD\n"]
+bioloid_action = ["WFWD\r","WBWD\r","WLT \r","WRT \r","WLSD\r","WRSD\r","WFLS\r","WFRS\r","WBLS\r","WBRS\r","WAL \r","WAR \r","WFLT\r","WFRT\r","WBLT\r","WBRT\r","WRDY\r","SIT \r","STND\r","ATKL\r","ATKR\r","ATKF\r", "ATKD\r"]
+ser = serial.Serial('/dev/ttyUSB0', 57600)
 
 
 def reverse_map_prediction(prediction_matrix):
@@ -50,18 +51,16 @@ def callback(detectedPersons):
             with graph.as_default():
                 prediction_matrix = loaded_model.predict(values)
                 value = reverse_map_prediction(prediction_matrix)
-                output += str(detectionId) + ","+ value
+                rospy.loginfo([detectionId, value])
                 # ACTIVATE when you have the robot connected to the computer
                 # The port can change.
                 if detectionId == 0:
-                    ser = serial.Serial('/dev/ttyUSB0', 57600)
                     ser.write(value)
-                    ser.close()
+                    rospy.loginfo(ser.read(4))
                 # if detectionId == 1:
                 #     ser = serial.Serial('/dev/ttyUSB1', 57600)
                 #     ser.write(value)
                 #     ser.close()
-    rospy.loginfo(output)
 
 def main():
     rospy.init_node('robot_controller', anonymous=True)
