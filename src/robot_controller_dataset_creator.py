@@ -14,7 +14,6 @@ def callback(detectedPersons):
                 # The TrackSynchronizer invoking this callback guarantees that the detectedPersons message is buffered until a
                 # track association is available for these detections (by comparing message timestamps of tracks and detections).
                 detectionId = detectedPerson.track_id
-                #bioloid_action = ["WFWD","WBWD","WLT ","WRT ","WLSD","WRSD","WFLS","WFRS","WBLS","WBRS","WAL ","WAR ","WFLT","WFRT","WBLT","WBRT","WRDY","SIT ","STND","ATKL","ATKR","ATKF", "ATKD"]
                 pose_covariance = list(detectedPerson.pose.covariance)
                 twist_covariance = list(detectedPerson.twist.covariance)
                 sublist = [detectedPerson.pose.pose.position.x,detectedPerson.pose.pose.position.y,detectedPerson.pose.pose.position.z, detectedPerson.pose.pose.orientation.x, detectedPerson.pose.pose.orientation.y, detectedPerson.pose.pose.orientation.z]

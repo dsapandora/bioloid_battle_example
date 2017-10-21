@@ -51,8 +51,14 @@ def callback(detectedPersons):
                 prediction_matrix = loaded_model.predict(values)
                 value = reverse_map_prediction(prediction_matrix)
                 rospy.loginfo([detectionId, value])
+                # ACTIVATE when you have the robot connected to the computer
+                # The port can change.
                 # if detectionId == 0:
                 #     ser = serial.Serial('/dev/ttyUSB0', 57600)
+                #     ser.write(value)
+                #     ser.close()
+                # if detectionId == 1:
+                #     ser = serial.Serial('/dev/ttyUSB1', 57600)
                 #     ser.write(value)
                 #     ser.close()
         output += "Empty set of detections!"
