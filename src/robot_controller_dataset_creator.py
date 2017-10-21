@@ -8,7 +8,7 @@ from spencer_tracking_msgs.msg import TrackedPersons
 def callback(detectedPersons):
     output = "DETECTADOS: "
     if detectedPersons.tracks:
-        with open('/home/dsapandora/tracking_person.csv', 'a') as f:
+        with open('tracking_person.csv', 'a') as f:
             writer=csv.writer(f)
             for detectedPerson in detectedPersons.tracks:
                 # The TrackSynchronizer invoking this callback guarantees that the detectedPersons message is buffered until a
