@@ -27,7 +27,7 @@ def reverse_map_prediction(prediction_matrix):
     # que transformar el arreglo de numeros en matrices, ahora necesitamos
     # regresarlo a su valor original para poder ser usado la lista bioloi
     index = argmax(prediction_matrix, axis=1) - 1
-    return bytearray(bioloid_action[index].encode('utf-8'))
+    return bytearray(bioloid_action[index])
 
 def callback(detectedPersons):
     output = "DETECTADOS: "
@@ -50,7 +50,7 @@ def callback(detectedPersons):
             with graph.as_default():
                 prediction_matrix = loaded_model.predict(values)
                 value = reverse_map_prediction(prediction_matrix)
-                rospy.loginfo([detectionId, value])
+                output += str(detectionId) + ","+ " ".join(str(e) for e in value)
                 # ACTIVATE when you have the robot connected to the computer
                 # The port can change.
                 # if detectionId == 0:
@@ -61,7 +61,6 @@ def callback(detectedPersons):
                 #     ser = serial.Serial('/dev/ttyUSB1', 57600)
                 #     ser.write(value)
                 #     ser.close()
-        output += "Empty set of detections!"
     rospy.loginfo(output)
 
 def main():
