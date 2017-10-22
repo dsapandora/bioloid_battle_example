@@ -4,6 +4,8 @@ from keras.layers import Dense, Activation
 from keras import optimizers
 import numpy as np
 import csv
+import matplotlib.pyplot as plt
+
 
 # fix random seed for reproducibility
 np.random.seed(49)
@@ -51,7 +53,7 @@ model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accurac
 from keras.utils.np_utils import to_categorical
 categorical_labels = to_categorical(Y, num_classes=23)
 # Move epochs in case that more data to help the converegence
-model.fit(X, categorical_labels, epochs=1000, batch_size=4)
+history = model.fit(X, categorical_labels, validation_split=0.33, epochs=1000, batch_size=4)
 scores = model.evaluate(X, categorical_labels)
 
 # evaluate the model
@@ -62,3 +64,19 @@ with open("modelsoftmax_matrix.json", "w") as json_file:
 # serialize weights to HDF5
 model.save_weights("modelsoftmax_matrix.h5")
 print("Saved model to disk")
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
