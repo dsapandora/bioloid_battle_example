@@ -24,7 +24,7 @@ dataset = np.loadtxt("tracking_person_cluster.csv", delimiter=",",converters={0:
 # split into input (X) and output (Y) variables
 X = dataset[:,0:81]
 Y = dataset[:,81].astype(int)
-print set(Y)
+labels = set(Y)
 
 adam=optimizers.Adam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 RSM=optimizers.RMSprop(lr=0.00001, rho=0.9, epsilon=1e-08, decay=0.0)
@@ -49,10 +49,10 @@ model.add(Dense(10, activation='relu'))
 
 
 # categorical_crossentropy
-model.add(Dense(14, activation='softmax'))
+model.add(Dense(len(labels), activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 from keras.utils.np_utils import to_categorical
-categorical_labels = to_categorical(Y, num_classes=14)
+categorical_labels = to_categorical(Y, num_classes=len(labels))
 # Move epochs in case that more data to help the converegence
 history = model.fit(X, categorical_labels, validation_split=0.33, epochs=1000, batch_size=4)
 scores = model.evaluate(X, categorical_labels)
