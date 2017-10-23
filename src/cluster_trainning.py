@@ -2,8 +2,9 @@ import numpy as np
 
 from sklearn.cluster import DBSCAN
 from sklearn import metrics
-from sklearn.datasets.samples_generator import make_blobs
 from sklearn.preprocessing import StandardScaler
+import csv
+
 
 def convtofloat(s):
     try:
@@ -18,7 +19,6 @@ centers = [[1, 1], [-1, -1], [1, -1]]
 dataset = np.loadtxt("tracking_person.csv", delimiter=",",converters={0:convtofloat,1:convtofloat,2:convtofloat,3:convtofloat,4:convtofloat})
 # split into input (X) and output (Y) variables
 X = dataset[:,0:81]
-labels_true = dataset[:,81]
 
 # #############################################################################
 # Compute DBSCAN
@@ -31,15 +31,23 @@ labels = db.labels_
 n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
 print set(labels)
 print('Estimated number of clusters: %d' % n_clusters_)
-print("Homogeneity: %0.3f" % metrics.homogeneity_score(labels_true, labels))
-print("Completeness: %0.3f" % metrics.completeness_score(labels_true, labels))
-print("V-measure: %0.3f" % metrics.v_measure_score(labels_true, labels))
-print("Adjusted Rand Index: %0.3f"
-      % metrics.adjusted_rand_score(labels_true, labels))
-print("Adjusted Mutual Information: %0.3f"
-      % metrics.adjusted_mutual_info_score(labels_true, labels))
 print("Silhouette Coefficient: %0.3f"
       % metrics.silhouette_score(X, labels))
+
+print ("Clusters parameters")
+with open('tracking_person_cluster.csv', 'a') as f:
+    writer=csv.writer(f)
+    for i in xrange(n_clusters_):
+        list = X[labels==i]
+        for element in list:
+            new_array = np.append(element, i)
+            writer.writerow(new_array)
+
+
+
+
+
+
 
 # #############################################################################
 # Plot result

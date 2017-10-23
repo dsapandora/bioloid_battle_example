@@ -2,7 +2,6 @@
 import rospy
 import csv
 import itertools
-import random
 from spencer_tracking_msgs.msg import TrackedPersons
 
 def callback(detectedPersons):
@@ -21,7 +20,6 @@ def callback(detectedPersons):
                 twist_list = [detectedPerson.twist.twist.linear.x, detectedPerson.twist.twist.linear.y, detectedPerson.twist.twist.linear.z]
                 sublist.extend(twist_list)
                 sublist.extend(twist_covariance)
-                sublist.append(random.uniform(0,22))
                 writer.writerow(sublist)
     else:
         output += "Empty set of detections!"

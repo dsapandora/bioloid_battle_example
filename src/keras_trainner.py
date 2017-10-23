@@ -17,7 +17,7 @@ def convtofloat(s):
         return 0.
 
 # load pima indians dataset
-dataset = np.loadtxt("tracking_person.csv", delimiter=",",converters={0:convtofloat,1:convtofloat,2:convtofloat,3:convtofloat,4:convtofloat})
+dataset = np.loadtxt("tracking_person_cluster.csv", delimiter=",",converters={0:convtofloat,1:convtofloat,2:convtofloat,3:convtofloat,4:convtofloat})
 
 
 
@@ -48,10 +48,10 @@ model.add(Dense(10, activation='relu'))
 
 
 # categorical_crossentropy
-model.add(Dense(23, activation='softmax'))
+model.add(Dense(26, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accuracy'])
 from keras.utils.np_utils import to_categorical
-categorical_labels = to_categorical(Y, num_classes=23)
+categorical_labels = to_categorical(Y, num_classes=26)
 # Move epochs in case that more data to help the converegence
 history = model.fit(X, categorical_labels, validation_split=0.33, epochs=1000, batch_size=4)
 scores = model.evaluate(X, categorical_labels)
