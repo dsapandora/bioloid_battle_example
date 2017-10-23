@@ -23,7 +23,8 @@ dataset = np.loadtxt("tracking_person_cluster.csv", delimiter=",",converters={0:
 
 # split into input (X) and output (Y) variables
 X = dataset[:,0:81]
-Y = dataset[:,81]
+Y = dataset[:,81].astype(int)
+print set(Y)
 
 adam=optimizers.Adam(lr=0.00001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 RSM=optimizers.RMSprop(lr=0.00001, rho=0.9, epsilon=1e-08, decay=0.0)
