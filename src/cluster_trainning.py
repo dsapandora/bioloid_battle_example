@@ -22,7 +22,7 @@ X = dataset[:,0:81]
 
 # #############################################################################
 # Compute DBSCAN
-db = DBSCAN(eps=0.3, min_samples=10).fit(X)
+db = DBSCAN(eps=0.3, min_samples=12).fit(X)
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
 core_samples_mask[db.core_sample_indices_] = True
 labels = db.labels_

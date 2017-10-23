@@ -19,7 +19,7 @@ loaded_model._make_predict_function()
 graph = tf.get_default_graph()
 # load weights into new model
 loaded_model.load_weights("modelsoftmax_matrix.h5")
-bioloid_action = ["WFWD\r","WBWD\r","WLT \r","WRT \r","WLSD\r","WRSD\r","WFLS\r","WFRS\r","WBLS\r","WBRS\r","WAL \r","WAR \r","WFLT\r","WFRT\r","WBLT\r","WBRT\r","WRDY\r","SIT \r","STND\r","ATKL\r","ATKR\r","ATKF\r", "ATKD\r"]
+bioloid_action = ["WFWD\r","WBWD\r","WLSD\r","WFLS\r","WFRS\r","WBLT\r","WBRT\r","WRDY\r","SIT \r","STND\r","ATKL\r","ATKR\r","ATKF\r", "ATKD\r"]
 ser0 = serial.Serial('/dev/ttyUSB0', 57600)
 ser1 = serial.Serial('/dev/ttyUSB1', 57600)
 
@@ -48,7 +48,8 @@ def callback(detectedPersons):
             sublist.extend(twist_covariance)
             values = np.array([sublist])
             global graph
-            global ser
+            global ser0
+            global ser1
             with graph.as_default():
                 prediction_matrix = loaded_model.predict(values)
                 value = reverse_map_prediction(prediction_matrix)
@@ -58,9 +59,10 @@ def callback(detectedPersons):
                 if detectionId == 0:
                     ser0.write(value)
                     rospy.loginfo(ser.read(4))
-                # if detectionId == 1:
-                #     ser1.write(value)
-                #     ser1.close()
+                if detectionId == 1:
+                    ser1.write(value)
+                    rospy.loginfo(ser.read(4))
+
 
 def main():
     rospy.init_node('robot_controller', anonymous=True)
