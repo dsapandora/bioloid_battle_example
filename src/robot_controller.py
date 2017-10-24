@@ -29,7 +29,7 @@ def reverse_map_prediction(prediction_matrix):
     # que transformar el arreglo de numeros en matrices, ahora necesitamos
     # regresarlo a su valor original para poder ser usado la lista bioloi
     index = argmax(prediction_matrix, axis=1) - 1
-    return bioloid_action[index]
+    return bioloid_action[int(index)]
 
 def callback(detectedPersons):
     output = "DETECTADOS: "
