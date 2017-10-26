@@ -4,6 +4,7 @@ from sklearn.cluster import DBSCAN
 from sklearn import metrics
 from sklearn.preprocessing import StandardScaler
 import csv
+from sklearn.cluster import KMeans
 
 
 def convtofloat(s):
@@ -22,17 +23,17 @@ X = dataset[:,0:81]
 
 # #############################################################################
 # Compute DBSCAN
-db = DBSCAN(eps=0.3, min_samples=100).fit(X)
+#db = DBSCAN(eps=0.3, min_samples=500).fit(X)
+# Compute KMEANS
+db = KMeans(n_clusters=15, random_state=0).fit(X)
 core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
-core_samples_mask[db.core_sample_indices_] = True
 labels = db.labels_
 
 # Number of clusters in labels, ignoring noise if present.
 n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
-print set(labels)
 print('Estimated number of clusters: %d' % n_clusters_)
-print("Silhouette Coefficient: %0.3f"
-      % metrics.silhouette_score(X, labels))
+#print("Silhouette Coefficient: %0.3f"
+#      % metrics.silhouette_score(X, labels))
 
 print ("Clusters parameters")
 with open('tracking_person_cluster.csv', 'a') as f:
@@ -47,7 +48,7 @@ with open('tracking_person_cluster.csv', 'a') as f:
 
 
 
-
+exit()
 
 # #############################################################################
 # Plot result
