@@ -11,17 +11,16 @@ from numpy import argmax
 import serial
 
 #FILE
-json_file = open('modelsoftmax_matrix.json', 'r')
+json_file = open('/home/ian/catkin_ws/modelsoftmax_matrix.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
 loaded_model._make_predict_function()
 graph = tf.get_default_graph()
 # load weights into new model
-loaded_model.load_weights("modelsoftmax_matrix.h5")
-bioloid_action = ["ATKL\r","ATKR\r","ATKF\r", "ATKD\r","WFWD\r","WBWD\r","WLT \r","WRT \r","WLSD\r","WRSD\r","WFLS\r","WFRS\r","WBLS\r","WBRS\r","WAL \r","WAR \r","WFLT\r","WFRT\r","WBLT\r","WBRT\r","WRDY\r","SIT \r","STND\r"]
-ser0 = serial.Serial('/dev/ttyUSB0', 57600)
-ser1 = serial.Serial('/dev/ttyUSB1', 57600)
+loaded_model.load_weights("/home/ian/catkin_ws/modelsoftmax_matrix.h5")
+bioloid_action = ["ATKL\r","ATKR\r","ATKF\r", "ATKD\r","WFWD\r","ATKR\r","WLT \r","WRT \r","WLSD\r","ATKL\r","WFLS\r","ATKD\r","WBLS\r","ATKF\r","WAL \r","WAR \r","WFLT\r","WFRT\r","WBLT\r","WBRT\r","WRDY\r","SIT \r","STND\r","ATKL\r"]
+#ser1 = serial.Serial('/dev/ttyUSB1', 57600)
 
 
 def reverse_map_prediction(prediction_matrix):
@@ -29,6 +28,8 @@ def reverse_map_prediction(prediction_matrix):
     # que transformar el arreglo de numeros en matrices, ahora necesitamos
     # regresarlo a su valor original para poder ser usado la lista bioloi
     index = argmax(prediction_matrix, axis=1) - 1
+    rospy.loginfo(index)
+    rospy.loginfo(bioloid_action[int(index)])
     return bioloid_action[int(index)]
 
 def callback(detectedPersons):
@@ -49,20 +50,22 @@ def callback(detectedPersons):
             values = np.array([sublist])
             global graph
             global ser0
-            global ser1
+#            global ser1
             with graph.as_default():
                 prediction_matrix = loaded_model.predict(values)
                 value = reverse_map_prediction(prediction_matrix)
-                rospy.loginfo([detectionId, value])
+                #rospy.loginfo([detectionId, value])
                 # ACTIVATE when you have the robot connected to the computer
                 # The port can change.
-                if detectionId == 0:
-                    ser0.write(value)
-                    rospy.loginfo(ser.read(4))
-                if detectionId == 1:
-                    ser1.write(value)
-                    rospy.loginfo(ser.read(4))
-
+                ser0 = serial.Serial('/dev/ttyUSB0', 57600)
+                ser0.write(value)
+                ser0.write("\r")
+                ser0.close()
+                #rospy.loginfo(ser0.read(4))
+                # if detectionId == 1:
+                #     ser1.write(value)
+                #     rospy.loginfo(ser.read(4))
+                #
 
 def main():
     rospy.init_node('robot_controller', anonymous=True)
