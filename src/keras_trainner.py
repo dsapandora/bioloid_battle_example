@@ -54,7 +54,7 @@ model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=['accurac
 from keras.utils.np_utils import to_categorical
 categorical_labels = to_categorical(Y, num_classes=len(labels))
 # Move epochs in case that more data to help the converegence
-history = model.fit(X, categorical_labels, validation_split=0.33, epochs=1000, batch_size=4)
+history = model.fit(X, categorical_labels, validation_split=0.33, epochs=50, batch_size=1000)
 scores = model.evaluate(X, categorical_labels)
 
 # evaluate the model

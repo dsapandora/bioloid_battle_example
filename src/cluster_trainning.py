@@ -46,10 +46,6 @@ with open('tracking_person_cluster.csv', 'a') as f:
 
 
 
-
-
-exit()
-
 # #############################################################################
 # Plot result
 import matplotlib.pyplot as plt
